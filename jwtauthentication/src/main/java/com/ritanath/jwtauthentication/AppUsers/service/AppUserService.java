@@ -14,4 +14,7 @@ public class AppUserService {
     public AppUser insertUser(AppUser user){
         return userRepo.save(user);
     }
+    public AppUser getAppUserByEmail(String email){
+        return userRepo.getAppUserByEmail(email);
+    }
 }
