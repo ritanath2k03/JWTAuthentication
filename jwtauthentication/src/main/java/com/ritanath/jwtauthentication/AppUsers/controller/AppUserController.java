@@ -7,28 +7,24 @@ import com.ritanath.jwtauthentication.AppUsers.model.AppUser;
 import com.ritanath.jwtauthentication.AppUsers.service.AppUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class AppUserController {
     @Autowired 
     private AppUserService userService;
 
-    @PostMapping("")
-    public AppUser createAppUser(@RequestBody AppUser entity) {
-        if(entity.getName()==null||entity.getPassword()==null)return null;
-        return userService.insertUser(entity);
-    }
     @GetMapping("")
-    public AppUser getAppuserByEmail(@RequestBody AppUser user){
-        AppUser appUser=userService.getAppUserByEmail(user.getEmail().toLowerCase());
+    public AppUser getAppuserByEmail(Authentication authentication){
+        String email=authentication.getName();
         
-        if(appUser==null)return null;
-        if(user.getPassword().equalsIgnoreCase(appUser.getPassword()))return appUser;
-        return null;
+        return userService.getAppUserByEmail(email);
+        
     }
 }
